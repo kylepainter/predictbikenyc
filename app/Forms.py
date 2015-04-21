@@ -2,7 +2,8 @@ from wtforms import StringField, SubmitField, SelectField, TextAreaField, Form
 from wtforms.validators import Required
 import pandas as pd
 
-manhattanstations = pd.load('/home/vagrant/projectcode/predictbikenyc/app/static/dataframes/manhattanstations.file')
+#manhattan_url = url_for('static', filename = 'dataframes/manhattanstations.file')
+manhattanstations = pd.load('./app/static/dataframes/manhattanstations.file')
 manhattanvalues = zip(manhattanstations.id.to_dict().values(),manhattanstations.stAddress1.values)
 address_list = [{'id':n[0],'address':n[1]} for n in manhattanvalues]
 range(0, 24)

@@ -7,17 +7,17 @@ import pandas as pd
 import urllib2, json
 
 path_to_project = '/home/vagrant/projectcode/predictbikenyc/'
-dataframe_dir = 'app/static/dataframes/'
+dataframe_dir = '/app/static/dataframes/'
 
-with open('/home/vagrant/projectcode/apikeys.txt') as infile:
+with open('apikeys.txt') as infile:
     opencage_apikey = infile.readline().strip().split('=')[1]
     googleapikey = infile.readline().strip().split('=')[1]
 
-stations = pd.load('%s%smanhattanstations.file' % (path_to_project, dataframe_dir))
-weekday_medians =  pd.load('%s%sweekday_medians.file' % (path_to_project, dataframe_dir))
-weekday_medians_no_hour = pd.load('%s%sweekday_medians_no_hour.file' % (path_to_project, dataframe_dir))
-midpoint_medians = pd.load('%s%smidpoint_medians.file' % (path_to_project, dataframe_dir))
-hour_scaling = pd.load('%s%shour-scaling.file' % (path_to_project, dataframe_dir))
+stations = pd.load('.%smanhattanstations.file' % (dataframe_dir))
+weekday_medians =  pd.load('.%sweekday_medians.file' % ( dataframe_dir))
+weekday_medians_no_hour = pd.load('.%sweekday_medians_no_hour.file' % ( dataframe_dir))
+midpoint_medians = pd.load('.%smidpoint_medians.file' % ( dataframe_dir))
+hour_scaling = pd.load('.%shour-scaling.file' % ( dataframe_dir))
 hours = ['Now','6:00am','7:00am','8:00am','9:00am','10:00am','11:00am','12:00pm','1:00pm','2:00pm','3:00pm','4:00pm','5:00pm', \
         '6:00pm','7:00pm','8:00pm','9:00pm','10:00pm','11:00pm','12:00am','1:00am','2:00am','3:00am','4:00am','5:00am']
 
