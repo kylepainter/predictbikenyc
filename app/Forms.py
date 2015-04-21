@@ -1,13 +1,8 @@
-from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, SelectField, TextAreaField
+from wtforms import StringField, SubmitField, SelectField, TextAreaField, Form
 from wtforms.validators import Required
-#from flask import render_template, flash, redirect, request, Response, send_file
-#from app import app
-#from .forms import LoginForm
 import pandas as pd
-#import matplotlib.pyplot as plt
 
-manhattanstations = pd.load('/home/vagrant/projectcode/manhattanstations.file')
+manhattanstations = pd.load('/home/vagrant/projectcode/predictbikenyc/app/static/dataframes/manhattanstations.file')
 manhattanvalues = zip(manhattanstations.id.to_dict().values(),manhattanstations.stAddress1.values)
 address_list = [{'id':n[0],'address':n[1]} for n in manhattanvalues]
 range(0, 24)

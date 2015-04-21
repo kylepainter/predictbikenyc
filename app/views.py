@@ -4,7 +4,6 @@ from Forms import PredictForm
 from math import ceil
 from datetime import datetime
 import pandas as pd
-import matplotlib.pyplot as plt
 import urllib2, json
 
 path_to_project = '/home/vagrant/projectcode/predictbikenyc/'
