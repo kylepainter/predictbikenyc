@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block extrascript %}
+    <style>
+        body {
+        background: url({{ url_for('static', filename = 'img/index_background.jpg') }}) no-repeat;
+        background-size:cover;
+        background-attachment:fixed;
+        background-position: left top;
+        position:absolute;
+        height:1010px
+        width: ?px;
+        margin:0;
+        }
+          .box {
+        background-color: #D4D4D4;
+        margin: 0px auto;
+        padding-right:24px;
+        padding-left:24px;
+        opacity:.95;
+        }
+        div {
+        text-align: justify;
+        }
+        h1{
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3"></div>
+
+      <div class="col-md-6 box">
+        <h1><b>Welcome to PredictBikeNYC!</b></h1>
+        <p>
+        This project uses ride data from New York's <a href="https://www.citibikenyc.com/">citibike NYC Bike Shares</a> data to predict the distance it takes to travel between two points in Manhattan south of Central Park. 
+        </p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+<br/>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+
+        <h3><b>Motivation</b></h3>
+        <p>
+            While Google Maps has made some strides in making duration predictions for non-automobile trips, the predictions are unreliable, and do not take time-based conditions into account. Compared to the actual duration of cyclists covering a given route, sometimes Google is pretty close to the median. In these graphs, the flat cyan line is Google's prediction (which is the same at all hours), while the blue dots are actual times traveled by citibike cyclists.</p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-6">
+
+        <img src="{{ url_for('static', filename = 'img/google_close_to_median.png') }}">
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+
+        <p>But sometimes their predictions are well above most rides:</p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename = 'img/google_above_median.png') }}">
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+        <p>And Google sometimes predicts well below how long it takes most riders:</p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename = 'img/google_below_median.png') }}">
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+        <p>And the duration of the average trip can vary widely over the course of a day for a given ride, which Google's prediction algorithm does not account for:</p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-6">
+        <img src="{{ url_for('static', filename = 'img/fluctuating_by_hour.png') }}">
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+        <p>
+            Simply put, Google predictions for bike trip duration aren't reliable. This project corrects these problems by using data from actual bike riders to make predictions for how long a chosen trip will take in Manhattan.
+        </p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br> <br/><br/>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+        <h3><b>Data</b></h3>
+        <p>
+            Bike Share NYC is a subscription service that allows users to check out bikes from one station and drop them off at another station around town. There are over 300 stations in New York City, located in Manhattan south of Central Park and in select western Brooklyn neighborhoods, and customers take nearly 800,000 rides per month. 
+            Each ride by a citibike customer is recorded, including the location/timestamp of the start and end station, as well as the customer type, gender, and birthyear of the rider.
+
+            All ride data is <a href="https://www.citibikenyc.com/system-data">available</a> for July 2013 - December 2014, but an early software error was causing some trips to have <a href="http://www.rausnitz.com/blog/2014/04/bad-data/">massive errors</a>, so this project uses only data from April-December 2014. This data includes over 6 million distinct rides.
+        </p>
+        <p>
+            Ride data was transformed by calculating <a href="http://en.wikipedia.org/wiki/Taxicab_geometry">Manhattan distance</a> of a given trip (to approximate movement along blocks, rather than by straight line).
+            Trips over 45 minutes are rare because trips over that duration get charged more, but because they can skew summary stats, they were eliminated. Finally, while there are some bike stations in two areas of Brooklyn, only data from Manhattan was used.
+        </p>
+        <p>
+            Additionally, weather data from <a href="http://cdo.ncdc.noaa.gov/qclcd/QCLCD?prior=N">National Climate Data Center</a> was joined to bike data to determine how rain affects rider behavior. While weather did not have a large enough effect to include in the prediction model, there are some interesting conclusions that can be made by <a href="/rain">analyzing it.</a>
+        </p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br> <br/><br/>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+        <h3><b>Prediction</b></h3>
+        <p>
+            The model used for <a href="/predict">prediction</a> is able to take as input the hour of day and any two arbitrary points in Manhattan south of Central Park, as inputted via clickable GoogleMaps-based interface, and calculate a likely time duration for that particular trip. The model has a number of steps:
+            <ul>
+                <li>The closest station to each point is found. (Points too far away from a station (e.g., in the East River) are ruled out of bounds.)</li>
+                <li>The duration of a trip between these two reference stations is found. This is a three-stage process based on how much data is available
+                    <ul>
+                        <li>If there are enough datapoints between those two stations at the chosen time of day, the median of those rides is selected.</li>
+                        <li>If there are not enough time-based datapoints between those two stations, the median of all rides for that time is selected, and then scaled according to average speed at that time of day.</li>
+                        <li>If there are too few (or no) datapoints between the two stations, a midpoint station is found and trip durations are calculated for those two intermediate trips. The intermediate durations are added, and the result is then scaled according to average speed at that time of day.</li>
+                    </ul>
+                </li>
+                <li>Finally, the predicted duration between the two reference stations is adjusted based on the ratio of the Manhattan distance between those stations compared to the that of the original selected points.</li>
+            </ul>
+            Medians are chosen rather than means because really long trips (which are probably more leisurely) can skew the mean upwards.
+        </p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br> <br/><br/>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+        <h3><b>Zones</b></h3>
+        <p>
+            Manhattan bike stations were separated into six zones in order to be able to chart summary statistics of movement speeds and volume across regions of the city. That analysis can be found <a href="/zones">here</a>
+        </p>
+      </div>
+      <div class="col-md-3"></div>
+    </div>
+</br> <br/><br/>
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-6 box">
+
+        <h4>Note</h4>
+        <p>
+            This website is not affiliated in any way with the citibike NYC Bike Shares program or the city of New York.
+        </p>
+    </div>
+    <div class="col-md-3"></div>
+   </div>
+
+  </div>
+{% endblock %}

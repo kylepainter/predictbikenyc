@@ -1,0 +1,104 @@
+  {% extends "base.html" %}
+
+  {% block extrascript %}
+
+  <style type="text/css">
+
+  body {
+
+    background: url({{ url_for('static', filename = 'img/rain_background.jpg') }}) no-repeat;
+    background-size:cover;
+    background-attachment:fixed;
+    background-position: left top;
+    position:absolute;
+    height:1010px
+    width: ?px;
+    margin:0;
+
+  }
+  .box {
+background-color: #D4D4D4;
+margin: 0px auto;
+padding-right:24px;
+padding-left:24px;
+opacity:.95;
+}
+
+
+</style>
+  {% endblock %}
+  {% block content %}
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7 box">
+        <h2>Biking in the rain</h2>
+        <h3>Bikes are a bit faster during rain than during sunny weather. While not a large difference (.11 mph), it is a statistically significant gap given that these are averages of 5 million+ sunny rides and nearly 200,000 rainy rides.</h3>
+      </div>
+    </div>
+<br/> <br/>
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7">
+
+        <img src="{{ url_for('static', filename = 'img/sunrainspeed.png') }}" height="400"> 
+                </div>
+        </div>
+<br/> 
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7 box">
+        <h3>Why is this? Does rain cause cyclists to ride faster, or are there diffferent cyclists out on rainy days?</h3>
+                </div>
+        </div>
+<br/> <br/>       <br/>       <br/> <br/> <br/>
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7 box">
+        <h3>The data gives us a few clues. Rainy cyclists are half a year younger and 16% more male than during sunny times.</h3>
+                </div>
+        </div>
+              <br/>
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7">
+        <img src="{{ url_for('static', filename = 'img/sunrainage.png') }}" height="400">
+  
+        <img src="{{ url_for('static', filename = 'img/sunraingender.png') }}" height="400">
+                </div>
+        </div>
+<br/> <br/><br/> <br/>  <br/>
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7 box">
+        <h3>We can find an expected average speed by multiplying the age distribution of riders by the average speed of each age. The expected sunny-day speed for this group of cyclists is slightly lower than their actual speed during the rain.</h3>
+                </div>
+        </div>
+<br/>
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7">
+        <img src="{{ url_for('static', filename = 'img/expectedrainspeed.png') }}" height="400">
+                </div>
+        </div>
+                <br/> <br/> <br/>
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-7 box">
+        <h3>Conclusion: age/gender cohort explains only 52% of the difference between sunny and rainy weather.
+          The rest of the difference is likely dependent on self-selection of riders and higher motivation to finish the trip quickly.
+        </h3>
+        </div>
+    </div>
+</div>
+<br/> <br/>
+  {% endblock %}

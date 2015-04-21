@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+
+{% block extrascript %}
+
+
+
+  <style type="text/css">
+
+  body {
+
+    background: url({{ url_for('static', filename = 'img/predict_background.jpg') }}) no-repeat;
+    background-size:cover;
+    background-attachment:fixed;
+    background-position: left top;
+    position:absolute;
+    height:1010px
+    width: ?px;
+    margin:0;
+
+  }
+  .box {
+background-color: #D4D4D4;
+margin: 0px auto;
+padding-right:24px;
+padding-left:24px;
+opacity:.95;
+}
+
+    #map-canvas {
+      width: 370px;
+      height: 600px;
+      margin-bottom: 15px;
+      border: 2px solid #fff;
+    }
+    #start_latlong {
+      width: 285px;
+    }
+    #end_latlong {
+      width: 285px;
+    }
+  </style>
+  <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBG7MY4qQX4wj9VqKOje2uhE2nr0G2XPFU">
+  </script>
+  <script type="text/javascript">
+    function initialize() {
+  {% if data == None %}     
+      var oldstartLatlng = new google.maps.LatLng(40.76879184896989, -74.01806831359863);
+      var oldendLatlng = new google.maps.LatLng(40.76879184896989, -74.01446342468262);
+  {% else %}
+      var oldstartLatlng = new google.maps.LatLng({{ latlongs[0] }});
+      var oldendLatlng = new google.maps.LatLng({{ latlongs[1] }});
+  {% endif %}
+      var startmarker;
+      var styles = [
+        {
+          featureType: "poi",
+          stylers: [
+            { visibility: "off" }
+          ]
+        },{
+          featureType: "transit",
+          stylers: [
+            { visibility: "off" }
+          ]
+        }
+      ];
+
+      var mapOptions = {
+        center: { lat: 40.73649403, lng: -73.99004374},
+        zoom: 13,
+        zoomControl: false,
+        scrollwheel: false,
+        navigationControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        draggable: false,
+        disableDoubleClickZoom: true,      
+        streetViewControl: false,
+//          mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      var map = new google.maps.Map(document.getElementById('map-canvas'),
+          mapOptions);
+      map.setOptions({styles: styles}); 
+
+      var oldstartmarker = new google.maps.Marker({
+          position: oldstartLatlng,
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/grn-pushpin.png'
+      });
+      var oldendmarker = new google.maps.Marker({
+          position: oldendLatlng,
+          map: map,
+          icon: 'http://maps.google.com/mapfiles/ms/icons/red-pushpin.png'
+      });
+
+      google.maps.event.addListener(map, 'click', function(e) {
+        placeStartMarker(e.latLng, map);
+      });
+
+      google.maps.event.addListener(map, 'rightclick', function(e) {
+        placeEndMarker(e.latLng, map);
+      });
+
+      google.maps.event.addListener(map, "rightclick", function(rtclick) {
+        var endlat = rtclick.latLng.lat();
+        var endlng = rtclick.latLng.lng();
+        document.getElementById('end_latlong').value = rtclick.latLng.lat() + ', ' + rtclick.latLng.lng() ;
+
+      });
+
+      google.maps.event.addListener(map,'click',function(lftclick) {
+        var startlat = lftclick.latLng.lat();
+        var startlng = lftclick.latLng.lng(); 
+        document.getElementById('start_latlong').value = lftclick.latLng.lat() + ', ' + lftclick.latLng.lng();   
+
+        placeStartMarker(lftclick.latLng());   
+      }) 
+
+      google.maps.event.addListener(map,'mousemove',function(event) { 
+        document.getElementById('latspan').innerHTML = event.latLng.lat();
+        document.getElementById('lngspan').innerHTML = event.latLng.lng();
+        document.getElementById('latlong').innerHTML = event.latLng.lat() + ', ' + event.latLng.lng() ;
+      }); 
+    }  
+
+    var startmarker
+    function placeStartMarker(position, map) {
+      if ( startmarker ) {
+        startmarker.setPosition(position);
+      } else {
+      startmarker = new google.maps.Marker({
+        position: position,
+        map: map
+      });
+      }
+      startmarker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+    }
+
+    var endmarker
+    function placeEndMarker(position, map) {
+      if ( endmarker ) {
+        endmarker.setPosition(position);
+      } else {
+      endmarker = new google.maps.Marker({
+        position: position,
+        map: map
+      });
+      }
+      endmarker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png')
+    }
+
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+  </script>
+<!--
+  Stopwatch icon from: Freepik - http://www.flaticon.com/authors/freepik / Flaticon - http://www.flaticon.com . 
+  License: Creative Commons BY 3.0 - http://creativecommons.org/licenses/by/3.0/
+-->
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3">
+      </div>
+      <div class="col-md-6 box">
+  <h3>Predict bike travel duration in Manhattan</h3>
+  </div>
+  </div>
+ </div>
+<br/>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <h3 class=flashes>
+    {% for message in messages %}
+      <span style="background-color: #FFFF00">{{ message }}</span></li>
+    {% endfor %}
+    </h3>
+  {% endif %}
+{% endwith %}
+
+
+  <div class="container">
+    <div class="row">
+       <div class="col-md-1">
+   </div>
+      <div class="col-md-5 box">
+        Left click for start of trip (green)<br/>
+        Right click for end (red)
+        <div id="map-canvas"></div>
+      </div>
+ <div class="col-md-2">
+   </div>
+      <div class="col-md-4 box">
+        <br/> 
+        <h4>
+          {% if outofbounds == False %}
+          {% if data != None %}
+            The route from <img src="http://maps.google.com/mapfiles/ms/icons/grn-pushpin.png"><b>{{ address1 }}</b>
+            <br/>to <img src="http://maps.google.com/mapfiles/ms/icons/red-pushpin.png"><b>{{ address2 }}</b> 
+            <br/><br/>at <b>{{ hourtext }}</b>
+            <br/><br/>will take about 
+            <img src="{{ url_for('static', filename = 'img/stopwatch.png') }}"> <u><b>{{ triptime }}</b></u> minutes.
+            <br/>
+          {% endif %}
+          {% endif %}
+        </h4>
+
+
+ <br/> <br/> 
+        <form role="form">
+
+          <div class="form-group">
+            <label for="hour">Hour of trip:</label>
+            <select name="hour" width="300px">
+              {% for h in hours %}
+                <option name="{{h}}">{{ h }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="starttext"></label>
+            <input type="text" name="startlatlong" id="start_latlong" 
+          {% if data != None %}
+            value="{{ latlongs[0] }}"
+          {% endif %}
+            >
+          </div>
+          <div class="form-group">
+            <label for="endtext"></label>
+            <input type="text" name="endlatlong" id="end_latlong" 
+          {% if data != None %}
+            value="{{ latlongs[1] }}"
+          {% endif %}
+            >
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+                <br/><br/>
+        <div class="eventtext">
+          <div>Latitude: <span id="latspan"></span></div>
+          <div>Longitude: <span id="lngspan"></span></div>
+          <div>Lat Lng: <span id="latlong"></span></div>  
+        </div>
+
+
+      </div>
+<br/><br/>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+{% endblock %}

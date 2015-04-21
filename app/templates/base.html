@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if title %}
+    <title>{{ title }} - PredictBikeNYC</title>
+    {% else %}
+    <title>Welcome to PredictBikeNYC</title>
+    {% endif %}
+    <script type="text/javascript" src="/static/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/bootstrap-3.3.4-dist/js/jquery-1.11.2.min.js"></script>
+    <link rel=stylesheet type="text/css" href="/static/bootstrap-3.3.4-dist/css/bootstrap.min.css">
+          {% block extrascript %}{% endblock %}   
+   <!-- Custom CSS -->
+    <style>
+    body {
+
+        padding-top: 70px;
+
+
+        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+    }
+    </style>
+
+
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">PredictBikeNYC</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="/predict">Get a Prediction</a>
+                    </li>
+                    <li>
+                        <a href="/zones">Zones</a>
+                    </li>
+                    <li>
+                        <a href="/rain">Rain</a>
+                    </li>
+                    <li>
+                        <a href="http://thedataincubator.com">Data Incubator</a>
+                        <!-- Should move this farther to the right? -->
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+ 
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+             {% block content %}{% endblock %}
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+  </body>
+</html>
