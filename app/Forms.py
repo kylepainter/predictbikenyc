@@ -4,6 +4,7 @@ import pandas as pd
 import warnings
 
 warnings.simplefilter("ignore", category = FutureWarning)
+
 #manhattan_url = url_for('static', filename = 'dataframes/manhattanstations.file')
 manhattanstations = pd.load('./app/static/dataframes/manhattanstations.file')
 manhattanvalues = zip(manhattanstations.id.to_dict().values(),manhattanstations.stAddress1.values)
