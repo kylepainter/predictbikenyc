@@ -5,6 +5,8 @@ from math import ceil
 from datetime import datetime
 import pandas as pd
 import urllib2, json
+import warnings
+warnings.simplefilter("ignore", category = FutureWarning) # eliminates pandas future warning for pickled df
 
 path_to_project = '/home/vagrant/projectcode/predictbikenyc/'
 dataframe_dir = '/app/static/dataframes/'
@@ -13,6 +15,8 @@ with open('apikeys.txt') as infile:
     opencage_apikey = infile.readline().strip().split('=')[1]
     googleapikey = infile.readline().strip().split('=')[1]
 
+
+warnings.simplefilter("ignore", category = FutureWarning)
 stations = pd.load('.%smanhattanstations.file' % (dataframe_dir))
 weekday_medians =  pd.load('.%sweekday_medians.file' % ( dataframe_dir))
 weekday_medians_no_hour = pd.load('.%sweekday_medians_no_hour.file' % ( dataframe_dir))
