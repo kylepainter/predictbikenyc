@@ -7,14 +7,18 @@ from dateutil import tz
 import pandas as pd
 import urllib2, json
 import warnings
+import os
+
 warnings.simplefilter("ignore", category = FutureWarning) # eliminates pandas future warning for pickled df
 
 path_to_project = '/home/vagrant/projectcode/predictbikenyc/'
 dataframe_dir = '/app/static/dataframes/'
 
-with open('apikeys.txt') as infile:
-    opencage_apikey = infile.readline().strip().split('=')[1]
-    googleapikey = infile.readline().strip().split('=')[1]
+googleapikey = os.environ['googleapikey']
+opencage_apikey = os.environ['opencage_apikey']
+#with open('apikeys.txt') as infile:
+#     = infile.readline().strip().split('=')[1]
+#     = infile.readline().strip().split('=')[1]
 
 
 warnings.simplefilter("ignore", category = FutureWarning)
