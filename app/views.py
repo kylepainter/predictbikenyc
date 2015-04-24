@@ -16,10 +16,6 @@ dataframe_dir = '/app/static/dataframes/'
 
 googleapikey = os.environ['GOOGLEAPIKEY']
 opencage_apikey = os.environ['OPENCAGEAPIKEY']
-#with open('apikeys.txt') as infile:
-#     = infile.readline().strip().split('=')[1]
-#     = infile.readline().strip().split('=')[1]
-
 
 warnings.simplefilter("ignore", category = FutureWarning)
 stations = pd.load('.%smanhattanstations.file' % (dataframe_dir))
