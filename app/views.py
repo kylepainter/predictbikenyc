@@ -14,8 +14,8 @@ warnings.simplefilter("ignore", category = FutureWarning) # eliminates pandas fu
 path_to_project = '/home/vagrant/projectcode/predictbikenyc/'
 dataframe_dir = '/app/static/dataframes/'
 
-googleapikey = os.environ['googleapikey']
-opencage_apikey = os.environ['opencage_apikey']
+googleapikey = os.environ['GOOGLEAPIKEY']
+opencage_apikey = os.environ['OPENCAGEAPIKEY']
 #with open('apikeys.txt') as infile:
 #     = infile.readline().strip().split('=')[1]
 #     = infile.readline().strip().split('=')[1]
