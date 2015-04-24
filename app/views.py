@@ -3,6 +3,7 @@ from app import app
 from Forms import PredictForm
 from math import ceil
 from datetime import datetime
+from dateutil import tz
 import pandas as pd
 import urllib2, json
 import warnings
@@ -70,9 +71,10 @@ def predict():
         return render_template('predict.html', title=title, form=form, data = None, outofbounds = False, hours = hours, googleapikey = googleapikey)
 
 def converthour(hourstr):
+    timezone = tz.gettz('America/New_York')
     hourtext = hourstr
     if hourstr == "Now":
-        hourint = datetime.now().hour
+        hourint = datetime.now(tz = timezone).hour
         if hourint > 12:
             hourtext = str(hourint - 12) + ":00 pm"
         elif hourint == '0':
