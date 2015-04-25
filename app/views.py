@@ -1,6 +1,5 @@
 from flask import render_template, flash, redirect, request, url_for
 from app import app
-from Forms import PredictForm
 from math import ceil
 from datetime import datetime
 from dateutil import tz
@@ -11,18 +10,17 @@ import os
 
 warnings.simplefilter("ignore", category = FutureWarning) # eliminates pandas future warning for pickled df
 
-path_to_project = '/home/vagrant/projectcode/predictbikenyc/'
-dataframe_dir = '/app/static/dataframes/'
+path_to_project = '/home/vagrant/projectcode/predictbikenyc'
 
 googleapikey = os.environ['GOOGLEAPIKEY']
 opencage_apikey = os.environ['OPENCAGEAPIKEY']
 
-warnings.simplefilter("ignore", category = FutureWarning)
-stations = pd.load('.%smanhattanstations.file' % (dataframe_dir))
-weekday_medians =  pd.load('.%sweekday_medians.file' % ( dataframe_dir))
-weekday_medians_no_hour = pd.load('.%sweekday_medians_no_hour.file' % ( dataframe_dir))
-midpoint_medians = pd.load('.%smidpoint_medians.file' % ( dataframe_dir))
-hour_scaling = pd.load('.%shour-scaling.file' % ( dataframe_dir))
+path_to_df = path_to_project + '/app/static/dataframes/'
+stations = pd.load('%smanhattanstations.file' % (path_to_df))
+weekday_medians =  pd.load('%sweekday_medians.file' % (path_to_df))
+weekday_medians_no_hour = pd.load('%sweekday_medians_no_hour.file' % (path_to_df))
+midpoint_medians = pd.load('%smidpoint_medians.file' % (path_to_df))
+hour_scaling = pd.load('%shour-scaling.file' % (path_to_df))
 hours = ['Now','6:00am','7:00am','8:00am','9:00am','10:00am','11:00am','12:00pm','1:00pm','2:00pm','3:00pm','4:00pm','5:00pm', \
         '6:00pm','7:00pm','8:00pm','9:00pm','10:00pm','11:00pm','12:00am','1:00am','2:00am','3:00am','4:00am','5:00am']
 
@@ -46,29 +44,28 @@ def rain():
 def predict():
     distance_tolerance = .3
     title = 'Get a Prediction'
-    form = PredictForm()
     if request.args.has_key('startlatlong'):  
         querystring = request.args
-        if querystring['startlatlong'] == '':
+        if querystring['startlatlong'] == '' or querystring['endlatlong'] == '':
             flash('Please select coordinates.')
-            return render_template('predict.html', title=title, form=form, data = None, outofbounds = False)
+            return render_template('predict.html', title=title,  data = None, outofbounds = False)
         slat, slng = querystring['startlatlong'].split(',')
         elat, elng = querystring['endlatlong'].split(',')
         latlongs = [querystring['startlatlong'],querystring['endlatlong']]
         if (find_distance_to_nearest_station(float(slat), float(slng)) > distance_tolerance) or \
                 (find_distance_to_nearest_station(float(elat), float(elng)) > distance_tolerance):
             flash('At least one of those coordinates was out of bounds.')
-            return render_template('predict.html', title=title, form=form, data = querystring, latlongs = latlongs, outofbounds = True, hours = hours, googleapikey = googleapikey)
+            return render_template('predict.html', title=title,  data = querystring, latlongs = latlongs, outofbounds = True, hours = hours, googleapikey = googleapikey)
         address1 = get_address_from_latlong(slat, slng)
         address2 = get_address_from_latlong(elat, elng)
         hourint, hourtext = converthour(querystring['hour'])
         seconds = predictfromlatlong(float(slat), float(slng), 
                                 float(elat), float(elng), hourint)  
         minutes = "%.2f" % (seconds * 1.0 / 60)
-        return render_template('predict.html', title=title, form=form, data = querystring, triptime = minutes, latlongs = latlongs, \
+        return render_template('predict.html', title=title, data = querystring, triptime = minutes, latlongs = latlongs, \
                                 hourtext = hourtext, outofbounds = False, address1 = address1, address2 = address2, hours = hours, googleapikey = googleapikey)
     else:
-        return render_template('predict.html', title=title, form=form, data = None, outofbounds = False, hours = hours, googleapikey = googleapikey)
+        return render_template('predict.html', title=title,  data = None, outofbounds = False, hours = hours, googleapikey = googleapikey)
 
 def converthour(hourstr):
     timezone = tz.gettz('America/New_York')
@@ -99,7 +96,7 @@ def predictfromlatlong(slat, slng, elat, elng, hour):
         return (abs(slat - elat) * 69 + abs(slng - elng) * 52.5) * 3600 / (6.685 * hour_scaling[hour])
     s_ref_lat, s_ref_lng = stations.ix[s_ref_station].latitude, stations.ix[s_ref_station].longitude
     e_ref_lat, e_ref_lng = stations.ix[e_ref_station].latitude, stations.ix[e_ref_station].longitude
-    startid, endid = stations.ix[s_ref_station].id.astype(str), stations.ix[e_ref_station].id.astype(str)
+    startid, endid = stations.ix[s_ref_station].id, stations.ix[e_ref_station].id
     ratio = man_dist_ratio(slat, slng, elat, elng, s_ref_lat, s_ref_lng, e_ref_lat, e_ref_lng)
 
     try:
