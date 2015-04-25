@@ -3,7 +3,7 @@ PredictBikeNYC
 
 This is a project for predicting bike trip duration in Manhattan, using New York bike share data.
 
-The project includes code for a web site (app/) and for processing the data and creating graphs (/preprocessing).
+The project includes code for a web site (app/) and for processing the data and creating graphs (preprocessing/).
 
 The bike trip data used in this project can be downloaded from this site: http://www.citibikenyc.com/system-data
 
