@@ -10,10 +10,16 @@ import os
 
 warnings.simplefilter("ignore", category = FutureWarning) # eliminates pandas future warning for pickled df
 
-path_to_project = '/home/vagrant/projectcode/predictbikenyc'
+# To work on heroku (which has an environment variable ONHEROKU set); if excepts, can be run locally at provided path
+try:
+    onheroku = os.environ['ONHEROKU']
+    path_to_project = '.'
+except:
+    path_to_project = '/home/vagrant/projectcode/predictbikenyc'
 
 googleapikey = os.environ['GOOGLEAPIKEY']
 opencage_apikey = os.environ['OPENCAGEAPIKEY']
+
 
 path_to_df = path_to_project + '/app/static/dataframes/'
 stations = pd.load('%smanhattanstations.file' % (path_to_df))
